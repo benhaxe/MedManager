@@ -7,6 +7,7 @@ import android.view.Menu;
 
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
+import com.android.benhaxe.medmanager.sync.ReminderUtilities;
 
 public class MainActivity extends BaseActivity {
 
@@ -26,7 +27,6 @@ public class MainActivity extends BaseActivity {
 
         gotoMedicine();
         useBottomNavigation();
-        /*ReminderUtilities.scheduleMedicationReminder(this);*/
     }
 
     public void gotoMedicine() {

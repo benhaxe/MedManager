@@ -88,6 +88,7 @@ public class BaseActivity extends AppCompatActivity {
     public final static String MEDICINE = "Medicines";
 
     //[Fire base values]
+    public static final String DRUGS_ID = "id";
     public static final String DRUGS_NAME = "drugs";
     public static final String DRUGS_DOSAGE = "dosage";
     public final String DRUG_START_DATE = "start_date";

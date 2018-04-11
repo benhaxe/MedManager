@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.android.benhaxe.medmanager.App;
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
+import com.android.benhaxe.medmanager.sync.ReminderUtilities;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,6 +36,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static java.security.AccessController.getContext;
 
 public class NewMedicine extends BaseActivity
         implements View.OnClickListener {
@@ -50,6 +53,8 @@ public class NewMedicine extends BaseActivity
     private Spinner timeInterval;
     private String drugs_interval;
     int thisMedInterval;
+
+    long id = 1;
 
     //[Fire base]
     private DatabaseReference medicineRef;
@@ -198,6 +203,10 @@ public class NewMedicine extends BaseActivity
 
         Log.w(TAG, "Gotten here");
 
+        Log.d(TAG, "Old Drugs ID: " + id);
+        id = id++;
+        Log.d(TAG, "New Drugs ID: " + id);
+
         medName = drugsName.getText().toString();
         medDosage = drugsDosage.getText().toString();
 
@@ -208,7 +217,12 @@ public class NewMedicine extends BaseActivity
 
         if (!TextUtils.isEmpty(medName) && !TextUtils.isEmpty(medDosage) && !TextUtils.isEmpty(medStartDate) && !TextUtils.isEmpty(medStopDate)) {
 
-            App.putEachMedication(medName, medDosage, thisMedInterval);
+            /*App.putEachMedication(medName, medDosage, thisMedInterval);*/
+
+            Bundle bundle = bundleDrugs(id, medName, medDosage);
+
+            //schedules the notification using fire base job scheduler
+            ReminderUtilities.scheduleMedicationReminder(bundle, this);
 
             DatabaseReference newMedicine = medicineRef.push();
 
@@ -235,6 +249,19 @@ public class NewMedicine extends BaseActivity
             drugsName.setError(REQUIRED);
             drugsDosage.setError(REQUIRED);
         }
+    }
+
+    private Bundle bundleDrugs(long id,  String medName, String medDosage){
+        Bundle bundle = new Bundle();
+
+        bundle.putLong(DRUGS_ID, id);
+
+        bundle.putString(DRUGS_NAME, medName);
+        bundle.putString(DRUGS_DOSAGE, medDosage);
+
+        bundle.putInt(DRUGS_INTERVAL, thisMedInterval);
+
+        return bundle;
     }
 
     @Override

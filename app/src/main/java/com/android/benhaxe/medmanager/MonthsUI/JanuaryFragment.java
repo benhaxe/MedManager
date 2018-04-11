@@ -13,8 +13,12 @@ import android.widget.TextView;
 
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
+import com.android.benhaxe.medmanager.adapter.MedicinePojo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -63,6 +67,36 @@ public class JanuaryFragment extends Fragment {
         Query query = dbRef
                 .orderByChild(DRUG_USER)
                 .equalTo(user.getUid());
+
+        dbRef
+                .orderByChild(DRUG_USER)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        MedicinePojo medicinePojo = dataSnapshot.getValue(MedicinePojo.class);
+                        Log.w("POJO", medicinePojo.getDrugs());
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
         // Set the above query into fire base
         queryData(query);
