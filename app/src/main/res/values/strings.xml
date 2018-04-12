@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">MedManager</string>
 
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_account">Account</string>
+    <string name="title_activity_month">Monthly Med</string>
+    <string name="title_activity_add">New Med</string>
 
     <!--Main menu starts here-->
     <string name="title_logout">Logout</string>
@@ -22,6 +24,8 @@
     <string name="prompt_drug_dosage">Dosage</string>
     <string name="title_save">Save</string>
     <string name="title_delete_account">Delete Account</string>
+    <string name="title_search">Search</string>
+    <string name="search_hint">Search...</string>
 
     <string-array name="drugs_interval">
         <item>1 Hour</item>

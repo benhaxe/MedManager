@@ -15,8 +15,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.android.benhaxe.medmanager.BaseActivity;
-import com.android.benhaxe.medmanager.ui.MainActivity;
 import com.android.benhaxe.medmanager.R;
+import com.android.benhaxe.medmanager.ui.AllMed;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -142,7 +142,7 @@ public class SignUpFragment extends Fragment {
 
                             currentUserDetails.child("region").setValue(region);
 
-                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            Intent intent = new Intent(getContext(), AllMed.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             mProgressDialog.dismiss();
                             startActivity(intent);

@@ -11,8 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,14 +22,10 @@ import com.android.benhaxe.medmanager.accountCreation.AccountActivity;
 import com.android.benhaxe.medmanager.adapter.MedicineHolder;
 import com.android.benhaxe.medmanager.adapter.MedicinePojo;
 import com.android.benhaxe.medmanager.helper.BottomNavigationFragment;
-import com.android.benhaxe.medmanager.ui.AllMedicine;
 import com.android.benhaxe.medmanager.ui.NewMedicine;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 /**
@@ -42,6 +36,8 @@ import com.google.firebase.database.Query;
  */
 
 public class BaseActivity extends AppCompatActivity {
+
+    private static final String TAG = BaseActivity.class.getSimpleName();
 
     public static FirebaseRecyclerAdapter<MedicinePojo, MedicineHolder> fireBaseRecyclerAdapter;
 
@@ -64,7 +60,7 @@ public class BaseActivity extends AppCompatActivity {
                 holder.setDosage(model.getDosage());
                 holder.setEndDate(model.getStop_date());
 
-                Log.d(AllMedicine.TAG, "Drugs name" + model.getDosage());
+                Log.d(TAG, "Drugs name" + model.getDosage());
             }
 
             @NonNull

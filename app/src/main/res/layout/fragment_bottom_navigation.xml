@@ -6,7 +6,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.android.benhaxe.medmanager.ui.MainActivity">
+    tools:context="com.android.benhaxe.medmanager.ui.AllMed">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

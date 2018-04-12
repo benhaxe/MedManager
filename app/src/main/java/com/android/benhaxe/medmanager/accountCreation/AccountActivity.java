@@ -6,8 +6,6 @@ import android.view.WindowManager;
 
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
-import com.android.benhaxe.medmanager.accountCreation.LoginFragment;
-import com.android.benhaxe.medmanager.accountCreation.SignUpFragment;
 
 public class AccountActivity extends BaseActivity {
 

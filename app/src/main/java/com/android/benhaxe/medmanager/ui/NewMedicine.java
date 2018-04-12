@@ -20,7 +20,6 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.benhaxe.medmanager.App;
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
 import com.android.benhaxe.medmanager.sync.ReminderUtilities;
@@ -36,8 +35,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static java.security.AccessController.getContext;
 
 public class NewMedicine extends BaseActivity
         implements View.OnClickListener {
@@ -240,7 +237,7 @@ public class NewMedicine extends BaseActivity
             newMedicine.child(DRUG_USER).setValue(mAuth.getCurrentUser().getUid());
 
             progressDialog.dismiss();
-            Intent intent = new Intent(NewMedicine.this, MainActivity.class);
+            Intent intent = new Intent(NewMedicine.this, AllMed.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

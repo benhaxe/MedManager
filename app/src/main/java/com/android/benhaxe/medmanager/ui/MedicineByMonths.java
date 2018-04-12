@@ -1,6 +1,8 @@
 package com.android.benhaxe.medmanager.ui;
 
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -8,7 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 
 import com.android.benhaxe.medmanager.BaseActivity;
@@ -25,6 +31,15 @@ import com.android.benhaxe.medmanager.MonthsUI.NovemberFragment;
 import com.android.benhaxe.medmanager.MonthsUI.OctoberFragment;
 import com.android.benhaxe.medmanager.MonthsUI.SeptemberFragment;
 import com.android.benhaxe.medmanager.R;
+import com.android.benhaxe.medmanager.adapter.MedicinePojo;
+import com.android.benhaxe.medmanager.adapter.MonthlyAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +49,24 @@ import java.util.List;
  */
 public class MedicineByMonths extends BaseActivity {
 
+    private static final String TAG = MedicineByMonths.class.getSimpleName();
+
     private Toolbar toolbar;
     private TabLayout tablayout;
     private ViewPager viewPager;
 
+    private SearchView searchView;
+
+    /**/
+
+    public static DatabaseReference dbRef;
+    public static FirebaseAuth mAuth;
+    public static FirebaseUser user;
+
+    public String currentMonths;
+    public MonthlyAdapter myAdapters;
+
+    /**/
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +75,17 @@ public class MedicineByMonths extends BaseActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tablayout = findViewById(R.id.tabs);
         // Assign the viewpager to tab
         tablayout.setupWithViewPager(viewPager);
+
+        // What to query for
+        dbRef = FirebaseDatabase.getInstance().getReference(MEDICINE);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
         useBottomNavigation();
 
@@ -110,6 +142,72 @@ public class MedicineByMonths extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        //Associate searchable configuration with the search view
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.menu_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                /*adapter.getFilter().filter(query);*/
+                Log.d("TAG", "Search Result: " + query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                /*adapter.getFilter().filter(newText);*/
+                Log.d("TAG", "Search Result: " + newText);
+                return true;
+            }
+        });
         return true;
+    }
+
+
+    public void fetchPerMonth(String currentMonth, MonthlyAdapter myAdapter){
+        this.currentMonths = currentMonth;
+        this.myAdapters = myAdapter;
+
+        dbRef.orderByChild(DRUG_USER)
+                .equalTo(user.getUid())
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        MedicinePojo medicinePojo = dataSnapshot.getValue(MedicinePojo.class);
+
+                        if (medicinePojo != null && medicinePojo.isForMonth(currentMonths)) {
+                            Log.d(TAG, "adapter: " + medicinePojo.toString());
+                            myAdapters.add(medicinePojo);
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+        myAdapters.clear();
     }
 }

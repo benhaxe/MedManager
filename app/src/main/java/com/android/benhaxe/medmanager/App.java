@@ -35,10 +35,10 @@ public class App extends Application {
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);
     }
-
+/*
     public static void putEachMedication(String name, String dosage, int interval){
         ShPref.put(BaseActivity.DRUGS_NAME, name);
         ShPref.put(BaseActivity.DRUGS_DOSAGE, dosage);
         ShPref.put(BaseActivity.DRUGS_INTERVAL, interval);
-    }
+    }*/
 }

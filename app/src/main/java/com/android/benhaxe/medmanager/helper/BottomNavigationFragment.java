@@ -12,9 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
-import com.android.benhaxe.medmanager.ui.MainActivity;
+import com.android.benhaxe.medmanager.ui.AllMed;
 import com.android.benhaxe.medmanager.ui.MedicineByMonths;
 import com.android.benhaxe.medmanager.ui.ProfileActivity;
 
@@ -59,7 +58,7 @@ public class BottomNavigationFragment extends Fragment implements
     }
 
     public void gotoMedicine() {
-        startActivity(new Intent(getActivity(), MainActivity.class));
+        startActivity(new Intent(getActivity(), AllMed.class));
     }
 
     @Override

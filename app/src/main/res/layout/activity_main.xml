@@ -5,22 +5,24 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.benhaxe.medmanager.ui.MainActivity">
+    tools:context="com.android.benhaxe.medmanager.ui.AllMed">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-        <FrameLayout
-            android:id="@+id/main_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
-            android:layout_gravity="bottom"
-            android:id="@+id/bottom_navigation_frame"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <include layout="@layout/recycler_view" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_navigation_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 </android.support.design.widget.CoordinatorLayout>

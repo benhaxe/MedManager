@@ -20,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.benhaxe.medmanager.BaseActivity;
-import com.android.benhaxe.medmanager.ui.MainActivity;
 import com.android.benhaxe.medmanager.R;
+import com.android.benhaxe.medmanager.ui.AllMed;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -283,7 +283,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChild(user_id)) {
-                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        Intent intent = new Intent(getContext(), AllMed.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         mProgressDialog.dismiss();
                         startActivity(intent);
@@ -303,7 +303,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void updateUI(FirebaseUser user) {
         mProgressDialog.dismiss();
         if (user != null) {
-            startActivity(new Intent(getActivity(), MainActivity.class));
+            startActivity(new Intent(getActivity(), AllMed.class));
             getActivity().finish();
         }
     }

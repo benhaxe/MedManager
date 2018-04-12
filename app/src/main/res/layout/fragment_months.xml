@@ -4,6 +4,6 @@
     android:layout_height="wrap_content"
     tools:context="com.android.benhaxe.medmanager.MonthsUI.JanuaryFragment">
 
-    <include layout="@layout/fragment_all_medicine" />
+    <include layout="@layout/recycler_view" />
 
 </FrameLayout>

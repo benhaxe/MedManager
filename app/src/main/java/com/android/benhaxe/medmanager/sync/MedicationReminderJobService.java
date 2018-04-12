@@ -20,9 +20,9 @@ import android.support.v4.content.ContextCompat;
 
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
-import com.android.benhaxe.medmanager.ui.MainActivity;
-import com.firebase.jobdispatcher.JobService;
+import com.android.benhaxe.medmanager.ui.AllMed;
 import com.firebase.jobdispatcher.JobParameters;
+import com.firebase.jobdispatcher.JobService;
 
 import static com.android.benhaxe.medmanager.BaseActivity.DRUGS_INTERVAL;
 import static com.android.benhaxe.medmanager.sync.MedicationReminderJobService.NotificationUtils.alarmSound;
@@ -110,7 +110,7 @@ public class MedicationReminderJobService extends JobService{
 
             //This method returns the instance of a pending intent - that will be passed to another app (Notification manager)
 
-            Intent startActivityIntent = new Intent(context, MainActivity.class);
+            Intent startActivityIntent = new Intent(context, AllMed.class);
 
             /**
              * context: The context in which the pending intent should start the activity

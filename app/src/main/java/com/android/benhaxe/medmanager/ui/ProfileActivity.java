@@ -44,7 +44,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.android.benhaxe.medmanager.ui.MainActivity.toolbar;
+import static com.android.benhaxe.medmanager.ui.AllMed.toolbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,9 +76,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
         toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProgressDialog = new ProgressDialog(this);
 
@@ -158,7 +155,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                     userDp.child(user_id).child("profile_pics").setValue(downloadUri);
 
                     mProgressDialog.dismiss();
-                    Intent mainIntent = new Intent(ProfileActivity.this, MainActivity.class);
+                    Intent mainIntent = new Intent(ProfileActivity.this, AllMed.class);
                     mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);
                 }
@@ -279,7 +276,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, AllMed.class));
         finish();
     }
 }
