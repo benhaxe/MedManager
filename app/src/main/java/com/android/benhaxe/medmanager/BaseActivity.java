@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.benhaxe.medmanager.accountCreation.AccountActivity;
@@ -23,10 +19,7 @@ import com.android.benhaxe.medmanager.adapter.MedicineHolder;
 import com.android.benhaxe.medmanager.adapter.MedicinePojo;
 import com.android.benhaxe.medmanager.helper.BottomNavigationFragment;
 import com.android.benhaxe.medmanager.ui.NewMedicine;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.Query;
 
 /**
  * Created by Benjamin Masebinu on 25-Mar-18.
@@ -39,40 +32,9 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
 
-    public static FirebaseRecyclerAdapter<MedicinePojo, MedicineHolder> fireBaseRecyclerAdapter;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    //Method to handle query every query
-    public static void queryData(Query complainQuery){
-
-        FirebaseRecyclerOptions<MedicinePojo> options = new FirebaseRecyclerOptions.Builder<MedicinePojo>()
-                .setQuery(complainQuery, MedicinePojo.class)
-                .build();
-
-        fireBaseRecyclerAdapter = new FirebaseRecyclerAdapter<MedicinePojo, MedicineHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull MedicineHolder holder, int position, @NonNull MedicinePojo model) {
-                holder.setName(model.getDrugs());
-                holder.setDosage(model.getDosage());
-                holder.setEndDate(model.getStop_date());
-
-                Log.d(TAG, "Drugs name" + model.getDosage());
-            }
-
-            @NonNull
-            @Override
-            public MedicineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_drug_view, parent, false);
-                return new MedicineHolder(view);
-            }
-        };
-        fireBaseRecyclerAdapter.startListening();
-        complainQuery.keepSynced(true);
     }
 
     //[Start]
@@ -97,7 +59,7 @@ public class BaseActivity extends AppCompatActivity {
     public final String DATE_FORMAT = "dd MMM, yy";
 
     //Method to load  fragments concerned with account creation
-    public void loadFragment(int frame_id, Fragment fragment){
+    public void loadFragment(int frame_id, Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(frame_id, fragment);
         fragmentTransaction.disallowAddToBackStack();
@@ -110,7 +72,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     //[isNetworkConnected] Method to check if device  has internet connection
-    public static boolean isNetworkConnected(Context context){
+    public static boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }

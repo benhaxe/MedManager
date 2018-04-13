@@ -1,8 +1,7 @@
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/sign_in_snack_bar"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_in_snack_bar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.android.benhaxe.medmanager.accountCreation.LoginFragment">
@@ -16,25 +15,27 @@
             android:id="@+id/img_header"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="center"
-            android:src="@drawable/vitamin" />
+            android:padding="20dp"
+            android:src="@drawable/insurance" />
 
         <LinearLayout
             android:id="@+id/ll_account_screen"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_below="@id/img_header"
+            android:layout_margin="5dp"
+            android:background="@drawable/login_signup"
             android:orientation="horizontal">
 
             <TextView
+                android:layout_margin="2dp"
                 style="@style/nav_account_screen"
-                android:background="@color/link_water"
-                android:text="New here ?" />
+                android:background="@drawable/ls_button"
+                android:text="Login" />
 
             <TextView
                 android:id="@+id/tv_goto_sign_up"
                 style="@style/nav_account_screen"
-                android:background="@color/layout_background"
                 android:text="Sign Up" />
         </LinearLayout>
 
@@ -87,8 +88,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:padding="8dp"
                     android:clickable="true"
+                    android:padding="8dp"
                     android:text="Forgot Password ?"
                     android:textSize="16sp" />
 
@@ -108,7 +109,7 @@
             android:layout_above="@+id/btn_google"
             android:layout_centerHorizontal="true"
             android:text="OR"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/btn_google"

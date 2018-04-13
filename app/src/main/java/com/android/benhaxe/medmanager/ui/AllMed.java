@@ -1,27 +1,33 @@
 package com.android.benhaxe.medmanager.ui;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.R;
+import com.android.benhaxe.medmanager.adapter.MedicinePojo;
+import com.android.benhaxe.medmanager.adapter.MonthlyAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
-public class AllMed extends BaseActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class AllMed extends BaseActivity implements SearchView.OnQueryTextListener {
     public static final String TAG = AllMed.class.getSimpleName();
 
     public static Toolbar toolbar;
-    private SearchView searchView;
 
     // Views
     private RecyclerView recyclerView;
@@ -30,6 +36,10 @@ public class AllMed extends BaseActivity {
     private DatabaseReference dbRef;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+
+    private List<MedicinePojo> medicinePojos;
+
+    private MonthlyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +57,16 @@ public class AllMed extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
+        /**/
+        medicinePojos = new ArrayList<>();
+        adapter = new MonthlyAdapter(medicinePojos, this);
+
+        fetchAllMed();
+
+        adapter.clear();
+        recyclerView.setAdapter(adapter);
+        /**/
         dbRef.keepSynced(true);
-
-        Query complainQuery = dbRef.orderByChild(DRUG_USER).equalTo(user.getUid());
-        queryData(complainQuery);
-
-        recyclerView.setAdapter(fireBaseRecyclerAdapter);
         useBottomNavigation();
     }
 
@@ -60,48 +74,69 @@ public class AllMed extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.menu_search)
-                .getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
+        MenuItem menuItem = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
 
-        // listening to search query text change
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                return false;
-            }
-        });
-
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        fireBaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(fireBaseRecyclerAdapter);
+    public void fetchAllMed() {
+        dbRef.orderByChild(DRUG_USER)
+                .equalTo(user.getUid())
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        MedicinePojo medicinePojo = dataSnapshot.getValue(MedicinePojo.class);
+
+                        if (medicinePojo != null) {
+                            adapter.add(medicinePojo);
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+        adapter.clear();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        fireBaseRecyclerAdapter.startListening();
-        recyclerView.setAdapter(fireBaseRecyclerAdapter);
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        fireBaseRecyclerAdapter.stopListening();
+    public boolean onQueryTextChange(String newText) {
+        newText = newText.toLowerCase();
+
+        ArrayList<MedicinePojo> newList = new ArrayList<>();
+
+        for (MedicinePojo medicinePojo : medicinePojos) {
+            String drugName = medicinePojo.getDrugs().toLowerCase();
+
+            if (drugName.contains(newText)) {
+                newList.add(medicinePojo);
+            }
+
+            adapter.setFilter(newList);
+        }
+        return true;
     }
 }

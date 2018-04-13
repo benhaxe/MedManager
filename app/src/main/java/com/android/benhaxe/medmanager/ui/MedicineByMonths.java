@@ -1,21 +1,20 @@
 package com.android.benhaxe.medmanager.ui;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.android.benhaxe.medmanager.BaseActivity;
 import com.android.benhaxe.medmanager.MonthsUI.AprilFragment;
@@ -54,9 +53,6 @@ public class MedicineByMonths extends BaseActivity {
     private Toolbar toolbar;
     private TabLayout tablayout;
     private ViewPager viewPager;
-
-    private SearchView searchView;
-
     /**/
 
     public static DatabaseReference dbRef;
@@ -110,7 +106,7 @@ public class MedicineByMonths extends BaseActivity {
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter{
+    class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> fragmentList = new ArrayList<>();
         private final List<String> fragmentTitleList = new ArrayList<>();
 
@@ -128,7 +124,7 @@ public class MedicineByMonths extends BaseActivity {
             return fragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title){
+        public void addFragment(Fragment fragment, String title) {
             fragmentList.add(fragment);
             fragmentTitleList.add(title);
         }
@@ -143,35 +139,15 @@ public class MedicineByMonths extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        //Associate searchable configuration with the search view
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.menu_search)
-                .getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
+        MenuItem menuItem = menu.findItem(R.id.menu_search);
+        menuItem.setEnabled(false);
+        menuItem.setVisible(false);
 
-        // listening to search query text change
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                /*adapter.getFilter().filter(query);*/
-                Log.d("TAG", "Search Result: " + query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                /*adapter.getFilter().filter(newText);*/
-                Log.d("TAG", "Search Result: " + newText);
-                return true;
-            }
-        });
         return true;
     }
 
 
-    public void fetchPerMonth(String currentMonth, MonthlyAdapter myAdapter){
+    public void fetchPerMonth(String currentMonth, MonthlyAdapter myAdapter) {
         this.currentMonths = currentMonth;
         this.myAdapters = myAdapter;
 

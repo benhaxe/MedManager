@@ -21,17 +21,13 @@ import java.util.List;
  * haxeboom@gmail.com
  */
 
-public class MonthlyAdapter extends RecyclerView.Adapter<MedicineHolder>
-        implements Filterable{
+public class MonthlyAdapter extends RecyclerView.Adapter<MedicineHolder> {
     private Context context;
     private List<MedicinePojo> medicinePojoList;
-
-    private List<MedicinePojo> medicineListFiltered;
 
     public MonthlyAdapter(List<MedicinePojo> medicinePojoList, Context context) {
         this.context = context;
         this.medicinePojoList = medicinePojoList;
-        this.medicineListFiltered = medicinePojoList;
     }
 
     @NonNull
@@ -67,34 +63,11 @@ public class MonthlyAdapter extends RecyclerView.Adapter<MedicineHolder>
         medicinePojoList.clear();
         notifyDataSetChanged();
     }
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                if (charString.isEmpty()){
-                    medicineListFiltered = medicinePojoList;
-                }else{
-                    List<MedicinePojo> filteredList = new ArrayList<>();
-                    for (MedicinePojo row : medicinePojoList){
-                        if (row.getDrugs().toLowerCase().contains(charString.toLowerCase())){
-                            filteredList.add(row);
-                        }
-                    }
-                    medicineListFiltered = filteredList;
-                }
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = medicineListFiltered;
-                return filterResults;
-            }
 
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                medicineListFiltered = (ArrayList<MedicinePojo>) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
+    // Filter for search view
+    public void setFilter(ArrayList<MedicinePojo> newList){
+        medicinePojoList = new ArrayList<>();
+        medicinePojoList.addAll(newList);
+        notifyDataSetChanged();
     }
-
 }
